@@ -25,8 +25,8 @@ CC = gcc
 $(NAME_CLIENT):	client.o Makefile minitalk.h utils.o
 		${CC} ${FLAGS} client.o Makefile minitalk.h utils.o -o ${NAME_CLIENT}
 
-$(NAME_SERVER):	${OBJECTS} client.o Makefile minitalk.h
-		${CC} ${FLAGS} server.o Makefile minitalk.h utils.o -o ${NAME_SERVER} ${OBJECTS}
+$(NAME_SERVER): client.o Makefile minitalk.h
+		${CC} ${FLAGS} server.o Makefile minitalk.h utils.o -o ${NAME_SERVER}
 
 all: $(NAME_SERVER) $(NAME_CLIENT)
 
