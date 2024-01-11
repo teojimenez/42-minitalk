@@ -25,18 +25,71 @@
 void    receive_bits(int bit)
 {
     static int i = 0;
-    static char whole_c;
+    static int j = 0;
+    static int flag = 1;
+    static char whole_c = 0;
+    static char char_nb;
+    char static *result = NULL;
+    int nb = 0;
 
-     if (bit == SIGUSR1) 
-        whole_c = (whole_c << 1) | 1;
-    else if (bit == SIGUSR2) 
-        whole_c = whole_c << 1;
-    i++;
-    if (i == 8)
+    // printf("OUTSIDE FLAG\n");
+    if (flag == 1)
     {
-        i = 0;
-        ft_putchar_fd(whole_c, 1);
-        whole_c = 0;
+        // printf("INSIDE FLAG\n");
+        if (bit == SIGUSR1) 
+        {
+            // printf("1");
+            char_nb = (char_nb << 1) | 1;
+        }
+        else if (bit == SIGUSR2) 
+        {
+            // printf("0");
+            char_nb = char_nb << 1;
+        }
+
+        i++;
+        if (i == 8)
+        {
+            nb = atoi(&char_nb);
+            i = 0;
+            flag = 0;
+            result = (char *)malloc(nb + 1 * sizeof(char));
+        }
+        // printf("VALOR i=%d\n", i);
+    }
+    else
+    {
+        nb = atoi(&char_nb);
+        // printf("NUMBER\n");
+        if (bit == SIGUSR1) 
+            whole_c = (whole_c << 1) | 1;
+        else if (bit == SIGUSR2)
+            whole_c = whole_c << 1;
+        i++;
+        if (i == 8)
+        {
+            // printf("NEW CHAR\n");
+            i = 0;
+            // ft_putchar_fd(whole_c, 1);
+            result[j] = whole_c;
+            j++;
+            whole_c = 0;
+        }
+        // printf("J:%d\n", j);
+        // printf("NB:%d\n", nb);
+        if(j == nb)
+        {
+            result[j] = '\0';
+            ft_putstr_fd(result, 1);
+            // free(result);
+            result[0] = '\0';
+            char_nb = 0;
+            i = 0;
+            flag = 1;
+            whole_c = 0;
+            char_nb = 0;
+            j = 0;
+        }
     }
 
 }

@@ -17,15 +17,15 @@ NAME_SERVER = server
 
 FLAGS = -Wall -Wextra -Werror -g
 
-SRC = server.c client.c utils.c
+SRC = server.c client.c utils.c utils2.c
 
 OBJECTS = $(SRC:.c=.o)
 
 CC = gcc
 
 $(NAME): $(OBJECTS)
-	$(CC) $(FLAGS) -o $(NAME_SERVER) server.o utils.o
-	$(CC) $(FLAGS) -o $(NAME_CLIENT) client.o utils.o
+	$(CC) $(FLAGS) -o $(NAME_SERVER) server.o utils.o utils2.o
+	$(CC) $(FLAGS) -o $(NAME_CLIENT) client.o utils.o utils2.o
 
 # tiene relinks
 %.o: %.c Makefile minitalk.h
