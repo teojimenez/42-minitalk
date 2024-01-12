@@ -22,5 +22,10 @@ void	ft_putstr_fd(char *s, int fd);
 int	    ft_atoi(const char *str);
 void	ft_putnbr_fd(int nb, int fd);
 void	ft_putchar_fd(char c, int fd);
+char	*ft_itoa(int nb);
+void	*ft_calloc(size_t count, size_t size);
+void	ft_bzero(void *str, size_t n);
+char	*ft_strdup(char *s1);
+int ft_strlen(char *str);
 
 #endif

@@ -28,38 +28,31 @@ void    receive_bits(int bit)
     static int j = 0;
     static int flag = 1;
     static char whole_c = 0;
-    static char char_nb;
-    char static *result = NULL;
-    int nb = 0;
+    // static char char_nb;
+    static int int_nb;
+    static char *result = NULL;
 
-    // printf("OUTSIDE FLAG\n");
-    if (flag == 1)
+    // printf("%d", flag);
+    if (flag == 1) 
     {
-        // printf("INSIDE FLAG\n");
-        if (bit == SIGUSR1) 
-        {
-            // printf("1");
-            char_nb = (char_nb << 1) | 1;
+        if (bit == SIGUSR1) {  // Cambia 1 por el valor de tu bit
+            int_nb = (int_nb << 1) | 1;
+        } else if (bit == SIGUSR2)
+        {  // Cambia 0 por el valor de tu otro bit
+            int_nb = int_nb << 1;
         }
-        else if (bit == SIGUSR2) 
-        {
-            // printf("0");
-            char_nb = char_nb << 1;
-        }
-
+        // printf("%d", i);
         i++;
-        if (i == 8)
-        {
-            nb = atoi(&char_nb);
+        if (i == 32) {  // Cambia 32 por el número de bits que deseas en tu entero
             i = 0;
             flag = 0;
-            result = (char *)malloc(nb + 1 * sizeof(char));
+            // printf("%d", int_nb);
+            result = (char *)malloc(int_nb + 1 * sizeof(char));
         }
-        // printf("VALOR i=%d\n", i);
     }
     else
     {
-        nb = atoi(&char_nb);
+        // nb = atoi(&char_nb);
         // printf("NUMBER\n");
         if (bit == SIGUSR1) 
             whole_c = (whole_c << 1) | 1;
@@ -76,18 +69,17 @@ void    receive_bits(int bit)
             whole_c = 0;
         }
         // printf("J:%d\n", j);
-        // printf("NB:%d\n", nb);
-        if(j == nb)
+        if(j == int_nb)
         {
             result[j] = '\0';
             ft_putstr_fd(result, 1);
-            // free(result);
+            printf("NB:%d\n", int_nb);
             result[0] = '\0';
-            char_nb = 0;
+            free(result);
+            // int_nb = 0;
             i = 0;
             flag = 1;
             whole_c = 0;
-            char_nb = 0;
             j = 0;
         }
     }

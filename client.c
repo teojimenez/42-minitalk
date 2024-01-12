@@ -23,24 +23,21 @@
 void    send_bits(char *str, int pid)
 {
     int i = 0;
-    int bits = 7;
+    int bits = 31;
     int len;
     len = ft_strlen(str);
-    char *char_nb = ft_itoa(len);
-    while(char_nb[i] != '\0')
+    // char *char_nb = ft_itoa(len);
+
+    while(bits >= 0)
     {
-        while(bits >= 0)
-        {
-            if((char_nb[i] >> bits & 1) == 1)
-                kill(pid, SIGUSR1); // -> 1
-            else
-                kill(pid, SIGUSR2); // -> 0
-            bits--;
-            usleep(80);
-        }
-        bits = 7;
-        i++;
+        if((len >> bits & 1) == 1)
+            kill(pid, SIGUSR1); // -> 1
+        else
+            kill(pid, SIGUSR2); // -> 0
+        bits--;
+        usleep(80);
     }
+
     bits = 7;
     i = 0;
     while(str[i] != '\0')
