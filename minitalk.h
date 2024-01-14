@@ -26,6 +26,6 @@ char	*ft_itoa(int nb);
 void	*ft_calloc(size_t count, size_t size);
 void	ft_bzero(void *str, size_t n);
 char	*ft_strdup(char *s1);
-int ft_strlen(char *str);
+int     ft_strlen(char *str);
 
 #endif

@@ -35,9 +35,9 @@ void    receive_bits(int bit)
     // printf("%d", flag);
     if (flag == 1) 
     {
-        if (bit == SIGUSR1) {  // Cambia 1 por el valor de tu bit
+        if(bit == SIGUSR1) {  // Cambia 1 por el valor de tu bit
             int_nb = (int_nb << 1) | 1;
-        } else if (bit == SIGUSR2)
+        }else if (bit == SIGUSR2)
         {  // Cambia 0 por el valor de tu otro bit
             int_nb = int_nb << 1;
         }
@@ -47,13 +47,13 @@ void    receive_bits(int bit)
             i = 0;
             flag = 0;
             // printf("%d", int_nb);
-            result = (char *)malloc(int_nb + 1 * sizeof(char));
+            result = (char *)malloc((int_nb + 1) * sizeof(char));
+            if(!result)
+                return ;
         }
     }
     else
     {
-        // nb = atoi(&char_nb);
-        // printf("NUMBER\n");
         if (bit == SIGUSR1) 
             whole_c = (whole_c << 1) | 1;
         else if (bit == SIGUSR2)
@@ -76,14 +76,13 @@ void    receive_bits(int bit)
             printf("NB:%d\n", int_nb);
             result[0] = '\0';
             free(result);
-            // int_nb = 0;
+            int_nb = 0;
             i = 0;
             flag = 1;
             whole_c = 0;
             j = 0;
         }
     }
-
 }
 
 int main(void)
