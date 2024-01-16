@@ -59,7 +59,7 @@ void    send_bits(char *str, int pid)
             bits--;
             usleep(80);
         }
-        usleep(80);
+        // usleep(80);
         bits = 7;
         i++;
     }
