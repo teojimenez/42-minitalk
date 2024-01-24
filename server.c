@@ -12,95 +12,92 @@
 
 #include "minitalk.h"
 
-//decoder *(va letra por letra y hasta que no es i = 8 no ha acabado la letra)
-//int i 
-//int c
 
-
-//whole_c = (whole_c << 1) | bit; 
-//cada bit se mueve a la izq y el mas izq sera 0. 
-//"| bit " -> si el bit es 1, el mas a la derecha se establecera en 1
-#include <stdio.h>
-
-void    receive_bits(int bit)
+void	receive_len(int int_nb, int i, int flag, char *result, int bit)
 {
-    static int i = 0;
+	if(bit == SIGUSR1) {  // Cambia 1 por el valor de tu bit
+		int_nb = (int_nb << 1) | 1;
+	}else if (bit == SIGUSR2)
+	{  // Cambia 0 por el valor de tu otro bit
+		int_nb = int_nb << 1;
+	}
+	// printf("%d", i);
+	i++;
+	if (i == 32) {  // Cambia 32 por el número de bits que deseas en tu entero
+		i = 0;
+		flag = 0;
+		// printf("%d", int_nb);
+		result = (char *)malloc((int_nb + 1) * sizeof(char));
+		if(!result)
+			return ;
+	}
+}
+
+int	receive_bits(int int_nb, int i, char whole_c, char *result, int bit)
+{
+	if (bit == SIGUSR1) 
+		whole_c = (whole_c << 1) | 1;
+	else if (bit == SIGUSR2)
+		whole_c = whole_c << 1;
+	i++;
+	if (i == 8)
+	{
+		i = 0;
+		result[j] = whole_c;
+		j++;
+		whole_c = 0;
+	}
+	if(j == int_nb)
+	{
+		result[j] = '\0';
+		ft_putstr_fd(result, 1);
+		result[0] = '\0';
+		free(result);
+		int_nb = 0;
+		i = 0;
+		flag = 1;
+		whole_c = 0;
+		j = 0;
+	}
+}
+
+void    menu_receiver(int bit)
+{	
+	static int i = 0;
     static int j = 0;
     static int flag = 1;
     static char whole_c = 0;
-    // static char char_nb;
     static int int_nb;
     static char *result = NULL;
 
-    // printf("%d", flag);
     if (flag == 1) 
-    {
-        if(bit == SIGUSR1) {  // Cambia 1 por el valor de tu bit
-            int_nb = (int_nb << 1) | 1;
-        }else if (bit == SIGUSR2)
-        {  // Cambia 0 por el valor de tu otro bit
-            int_nb = int_nb << 1;
-        }
-        // printf("%d", i);
-        i++;
-        if (i == 32) {  // Cambia 32 por el número de bits que deseas en tu entero
-            i = 0;
-            flag = 0;
-            // printf("%d", int_nb);
-            result = (char *)malloc((int_nb + 1) * sizeof(char));
-            if(!result)
-                return ;
-        }
-    }
+        receive_len(int_nb, i, whole_c, result, bit);
     else
-    {
-        if (bit == SIGUSR1) 
-            whole_c = (whole_c << 1) | 1;
-        else if (bit == SIGUSR2)
-            whole_c = whole_c << 1;
-        i++;
-        if (i == 8)
-        {
-            // printf("NEW CHAR\n");
-            i = 0;
-            // ft_putchar_fd(whole_c, 1);
-            result[j] = whole_c;
-            j++;
-            whole_c = 0;
-        }
-        // printf("J:%d\n", j);
-        if(j == int_nb)
-        {
-            result[j] = '\0';
-            ft_putstr_fd(result, 1);
-            printf("NB:%d\n", int_nb);
-            result[0] = '\0';
-            free(result);
-            int_nb = 0;
-            i = 0;
-            flag = 1;
-            whole_c = 0;
-            j = 0;
-        }
-    }
+		flag = 
+
 }
 
 int main(void)
 {
-    //se queda escuchando signal() con las dos funciones
-    //bucle infinito
-    ft_putstr_fd("\nPID: [", 1);
-    ft_putnbr_fd(getpid(), 1);
-    ft_putstr_fd("]", 1);
-    ft_putstr_fd("\nWaiting for a signal ...\n", 1);
-    signal(SIGUSR1, receive_bits); //-> 1
-    signal(SIGUSR2, receive_bits);// -> 0
-    while(1)
-        pause();
-    return (0);
+	ft_putstr_fd("PID: "C_GREEN, 1);
+	ft_putnbr_fd(getpid(), 1);
+	ft_putstr_fd(C_RESET"", 1);
+	ft_putstr_fd("\nWaiting for a signal ...\n", 1);
+	signal(SIGUSR1, menu_receiver);
+	signal(SIGUSR2, menu_receiver);
+	while(1)
+		pause();
+	return (0);
 }
 
 
+//decoder *(va letra por letra y hasta que no es i = 8 no ha acabado la letra)
+//int i 
+//int c
+
+//whole_c = (whole_c << 1) | bit; 
+//cada bit se mueve a la izq y el mas izq sera 0. 
+//"| bit " -> si el bit es 1, el mas a la derecha se establecera en 1
     //si el bit es un 1
     //hace una operacion desplaza a la izq de whole_a
     //operador OR con valor 1; resultado: conjunto de bits de la operacion

@@ -17,7 +17,8 @@
 # include <stdlib.h> //malloc
 # include <unistd.h>
 # include <signal.h>
-	
+
+
 void	ft_putstr_fd(char *s, int fd);
 int	    ft_atoi(const char *str);
 void	ft_putnbr_fd(int nb, int fd);
@@ -28,4 +29,6 @@ void	ft_bzero(void *str, size_t n);
 char	*ft_strdup(char *s1);
 int     ft_strlen(char *str);
 
+# define C_GREEN	"\x1b[32m"
+# define C_RESET	"\x1b[0m"
 #endif
