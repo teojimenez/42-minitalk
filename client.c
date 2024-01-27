@@ -12,46 +12,89 @@
 
 #include "minitalk.h"
 
-void	send_len(int pid, char *str)
+// void	send_len(int pid, char *str)
+// {
+// 	int	bits;
+// 	int	len;
+
+// 	bits = 31;
+// 	len = ft_strlen(str);
+// 	while (bits >= 0)
+// 	{
+// 		if ((len >> bits & 1) == 1)
+// 			kill(pid, SIGUSR1);
+// 		else
+// 			kill(pid, SIGUSR2);
+// 		bits--;
+// 		usleep(80);
+// 	}
+// }
+
+// void	send_bits(char *str, int pid)
+// {
+// 	int	i;
+// 	int	bits;
+
+// 	i = 0;
+// 	bits = 7;
+// 	send_len(pid, str);
+// 	while (str[i] != '\0')
+// 	{
+// 		while (bits >= 0)
+// 		{
+// 			if ((str[i] >> bits & 1) == 1)
+// 				kill(pid, SIGUSR1);
+// 			else
+// 				kill(pid, SIGUSR2);
+// 			bits--;
+// 			usleep(80);
+// 		}
+// 		bits = 7;
+// 		i++;
+// 	}
+// }
+
+void    send_bits(char *str, int pid)
 {
-	int	bits;
-	int	len;
-
-	bits = 31;
-	len = ft_strlen(str);
-	while (bits >= 0)
-	{
-		if ((len >> bits & 1) == 1)
-			kill(pid, SIGUSR1);
-		else
-			kill(pid, SIGUSR2);
-		bits--;
-		usleep(80);
-	}
-}
-
-void	send_bits(char *str, int pid)
-{
-	int	i;
-	int	bits;
-
-	i = 0;
-	bits = 7;
-	send_len(pid, str);
-	while (str[i] != '\0')
-	{
-		while (bits >= 0)
-		{
-			if ((str[i] >> bits & 1) == 1)
-				kill(pid, SIGUSR1);
-			else
-				kill(pid, SIGUSR2);
-			bits--;
-			usleep(80);
-		}
-		bits = 7;
-		i++;
-	}
+    int i = 0;
+    int bits = 31;
+    int len;
+    len = ft_strlen(str);
+    // char *char_nb = ft_itoa(len);
+    while(bits >= 0)
+    {
+        if((len >> bits & 1) == 1)
+            kill(pid, SIGUSR1); // -> 1
+        else
+            kill(pid, SIGUSR2); // -> 0
+        bits--;
+        usleep(80);
+    }
+    bits = 7;
+    i = 0;
+    while(str[i] != '\0')
+    {
+        while(bits >= 0)
+        {
+            //desplaza el valor de str[i] (los bits)
+            //operador AND (si el ultimo bit es 1 ; true)
+            if((str[i] >> bits & 1) == 1)
+            {
+                // write(1, "1", 1);
+                kill(pid, SIGUSR1); // -> 1
+            }
+            else
+            {
+                // write(1, "0", 1);
+                kill(pid, SIGUSR2); // -> 0
+            }
+            bits--;
+            usleep(80);
+        }
+        usleep(80);
+        bits = 7;
+        i++;
+    }
 }
 
 int	main(int argc, char **argv)

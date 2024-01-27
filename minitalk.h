@@ -27,7 +27,14 @@ char	*ft_itoa(int nb);
 void	*ft_calloc(size_t count, size_t size);
 void	ft_bzero(void *str, size_t n);
 char	*ft_strdup(char *s1);
-int     ft_strlen(char *str);
+int		ft_strlen(char *str);
+
+// SERVER EXTRA FUNCTIONS
+
+int		reset(int *int_nb, int *i, int *j, char **result);
+void	add_content(int *i, int *j, char **result, char *whole_c);
+int		add_memory(int *i, int *flag, int *int_nb, char **result);
+void	add_bits(int bit, char *whole_c, int *int_nb, int flag_chosen);
 
 # define C_GREEN	"\x1b[32m"
 # define C_RESET	"\x1b[0m"
