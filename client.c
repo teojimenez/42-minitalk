@@ -14,12 +14,10 @@
 
 void	send_len(int pid, char *str)
 {
-	int	i;
 	int	bits;
 	int	len;
 
 	bits = 31;
-	i = 0;
 	len = ft_strlen(str);
 	while (bits >= 0)
 	{
@@ -68,7 +66,9 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-//hace falta comprovar todo
+// TODO: 
+// *hace falta comprovar todo
+// *que el mensaje no este vacio
 
 //encoder
 //por cada str[i]
