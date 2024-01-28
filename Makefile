@@ -10,12 +10,10 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = all
-
-NAME_CLIENT = client
 NAME_SERVER = server
+NAME_CLIENT = client
 
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -g
 
 SRC = server.c client.c utils.c utils2.c server_extra.c
 
@@ -23,13 +21,13 @@ OBJECTS = $(SRC:.c=.o)
 
 CC = gcc
 
-$(NAME): $(OBJECTS)
-	$(CC) $(FLAGS) -o $(NAME_SERVER) server.o utils.o utils2.o server_extra.o
-	$(CC) $(FLAGS) -o $(NAME_CLIENT) client.o utils.o utils2.o server_extra.o
+all: ${NAME_SERVER} ${NAME_CLIENT}
 
-# tiene relinks
-%.o: %.c Makefile minitalk.h
-	$(CC) $(FLAGS) -I ./ -c $< -o $@
+${NAME_SERVER}: server.o utils.o utils2.o server_extra.o Makefile minitalk.h
+	${CC} ${FLAGS} server.o utils.o utils2.o server_extra.o -o ${NAME_SERVER}
+
+${NAME_CLIENT}: client.o utils.o utils2.o Makefile minitalk.h
+	${CC} ${FLAGS} client.o utils.o utils2.o -o ${NAME_CLIENT}
 
 clean:
 	rm -rf $(OBJECTS)

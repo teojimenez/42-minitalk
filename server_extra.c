@@ -15,7 +15,6 @@
 int	reset(int *int_nb, int *i, int *j, char **result)
 {
 	ft_putstr_fd((*result), 1);
-	// free((*result));
 	*int_nb = 0;
 	*i = 0;
 	*j = 0;
@@ -24,13 +23,7 @@ int	reset(int *int_nb, int *i, int *j, char **result)
 
 void	add_content(int *i, int *j, char **result, char *whole_c)
 {
-	// int	len;
-	
-	// len = ft_strlen(*g_result);
 	*i = 0;
-	// if(len != 0)
-	// 	++len;
-	// (*g_result)[--len] = *whole_c;
 	(*result)[(*j)++] = *whole_c;
 	*whole_c = 0;
 }
@@ -39,7 +32,7 @@ int	add_memory(int *i, int *flag, int *int_nb, char **result)
 {
 	*i = 0;
 	*flag = 0;
-	(*result) = (char *)malloc((*int_nb + 1	) * sizeof(char));
+	(*result) = (char *)malloc((*int_nb + 1) * sizeof(char));
 	if (!(*result))
 		return (-1);
 	(*result)[(*int_nb)] = '\0';

@@ -12,15 +12,16 @@
 
 #include "minitalk.h"
 
-int ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-    int i;
+	int	i;
 
-    i = -1;
-	if(!str)
+	i = 0;
+	if (!str)
 		return (0);
-    while(str && str[++i]);
-    return (i);
+	while (str && str[i])
+		i++;
+	return (i);
 }
 
 void	ft_putstr_fd(char *s, int fd)
