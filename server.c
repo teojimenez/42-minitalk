@@ -13,6 +13,7 @@
 #include "minitalk.h"
 
 static int	g_int_nb;
+static int	g_pid;
 
 void	receive_bits(int bit)
 {
@@ -29,6 +30,15 @@ void	receive_bits(int bit)
 			if (add_memory(&i, &flag, &g_int_nb, &result) == -1)
 				return ;
 	}
+	else if (flag == 2)
+	{
+		add_bits(bit, &whole_c, &g_pid, 0);
+		if (++i == 32)
+		{
+			i = 0;
+			flag = 0;
+		}
+	}
 	else
 	{
 		add_bits(bit, &whole_c, &g_int_nb, 1);
@@ -39,6 +49,7 @@ void	receive_bits(int bit)
 			flag = reset(&g_int_nb, &i, &j, &result);
 			free(result);
 			whole_c = 0;
+			kill(g_pid, SIGUSR2);
 		}
 	}
 }

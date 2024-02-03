@@ -31,7 +31,7 @@ void	add_content(int *i, int *j, char **result, char *whole_c)
 int	add_memory(int *i, int *flag, int *int_nb, char **result)
 {
 	*i = 0;
-	*flag = 0;
+	*flag = 2;
 	(*result) = (char *)malloc((*int_nb + 1) * sizeof(char));
 	if (!(*result))
 		return (-1);

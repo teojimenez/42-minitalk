@@ -97,6 +97,11 @@ void	send_bits(char *str, int pid)
 //     }
 // }
 
+void recieved(int pid)
+{
+	write(1, "RECIBIDO", 9);
+}
+
 int	main(int argc, char **argv)
 {
 	if (argc != 3)
@@ -118,7 +123,10 @@ int	main(int argc, char **argv)
 			ft_putstr_fd(C_RESET"Write a message with content!\n", 1);
 		}
 		else
+		{
+			signal(SIGUSR2, recieved); //int sig en (void)sig y devolvemos recibido
 			send_bits(argv[2], ft_atoi(argv[1]));
+		}
 	}
 	return (0);
 }
