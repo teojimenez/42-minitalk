@@ -47,17 +47,17 @@ void	send_bits(char *str, int pid)
 			else
 				kill(pid, SIGUSR2);
 			bits--;
-			usleep(100); //80
+			usleep(100);
 		}
 		bits = 7;
 		i++;
 	}
 }
 
-void	recived(int sig)
+void	received(int sig)
 {
 	(void)sig;
-	ft_putstr_fd(C_GREEN"RECIVED !", 1);
+	ft_putstr_fd(C_GREEN"RECEIVED !", 1);
 	ft_putstr_fd(C_RESET"\n", 1);
 }
 
@@ -81,7 +81,7 @@ int	main(int argc, char **argv)
 			ft_putstr_fd(C_RED"ERROR! ", 1);
 			ft_putstr_fd(C_RESET"Write a message with content!\n", 1);
 		}
-		signal(SIGUSR2, recived);
+		signal(SIGUSR2, received);
 		send_bits(argv[2], ft_atoi(argv[1]));
 	}
 	return (0);

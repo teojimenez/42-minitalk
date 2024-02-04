@@ -22,7 +22,6 @@ void	receive_bits(int bit, siginfo_t *info, void *context)
 	static char	whole_c = 0;
 	static char	*result = NULL;
 
-	(void)context;
 	if (flag == 1)
 	{
 		add_bits(bit, &whole_c, &g_int_nb, 0);
@@ -39,7 +38,6 @@ void	receive_bits(int bit, siginfo_t *info, void *context)
 		{
 			kill(info -> si_pid, SIGUSR2);
 			flag = reset(&g_int_nb, &i, &j, &result);
-			free(result);
 			whole_c = 0;
 		}
 	}
@@ -48,7 +46,7 @@ void	receive_bits(int bit, siginfo_t *info, void *context)
 int	main(void)
 {
 	struct sigaction	sigact;
-	
+
 	ft_putstr_fd("PID: "C_GREEN, 1);
 	ft_putnbr_fd(getpid(), 1);
 	ft_putstr_fd(C_RESET"", 1);

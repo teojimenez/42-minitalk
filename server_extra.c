@@ -18,6 +18,7 @@ int	reset(int *int_nb, int *i, int *j, char **result)
 	*int_nb = 0;
 	*i = 0;
 	*j = 0;
+	free(*result);
 	return (1);
 }
 
