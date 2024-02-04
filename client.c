@@ -26,7 +26,7 @@ void	send_len(int pid, char *str)
 		else
 			kill(pid, SIGUSR2);
 		bits--;
-		usleep(80);
+		usleep(100);
 	}
 }
 
@@ -47,7 +47,7 @@ void	send_bits(char *str, int pid)
 			else
 				kill(pid, SIGUSR2);
 			bits--;
-			usleep(80);
+			usleep(100); //80
 		}
 		bits = 7;
 		i++;
@@ -57,8 +57,8 @@ void	send_bits(char *str, int pid)
 void	recived(int sig)
 {
 	(void)sig;
-
-	write(1, "RECIVED!\n", 0);
+	ft_putstr_fd(C_GREEN"RECIVED !", 1);
+	ft_putstr_fd(C_RESET"\n", 1);
 }
 
 int	main(int argc, char **argv)
@@ -76,16 +76,13 @@ int	main(int argc, char **argv)
 			ft_putstr_fd(C_RED"ERROR! ", 1);
 			ft_putstr_fd(C_RESET"The PID its not correct!\n", 1);
 		}
-		else if (ft_strlen(argv[2]) < 1)
+		if (ft_strlen(argv[2]) < 1)
 		{
 			ft_putstr_fd(C_RED"ERROR! ", 1);
 			ft_putstr_fd(C_RESET"Write a message with content!\n", 1);
 		}
-		else
-		{
-			signal(SIGUSR2, recived);
-			send_bits(argv[2], ft_atoi(argv[1]));
-		}
+		signal(SIGUSR2, recived);
+		send_bits(argv[2], ft_atoi(argv[1]));
 	}
 	return (0);
 }

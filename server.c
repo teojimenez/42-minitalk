@@ -37,10 +37,10 @@ void	receive_bits(int bit, siginfo_t *info, void *context)
 			add_content(&i, &j, &result, &whole_c);
 		if (j == g_int_nb)
 		{
+			kill(info -> si_pid, SIGUSR2);
 			flag = reset(&g_int_nb, &i, &j, &result);
 			free(result);
 			whole_c = 0;
-			kill(info -> si_pid, SIGUSR2);
 		}
 	}
 }
@@ -53,8 +53,8 @@ int	main(void)
 	ft_putnbr_fd(getpid(), 1);
 	ft_putstr_fd(C_RESET"", 1);
 	ft_putstr_fd("\nWaiting for a signal ...\n", 1);
+	sigact.sa_flags = SA_RESTART | SA_SIGINFO;
 	sigact.sa_sigaction = receive_bits;
-	sigact.sa_flags = 0;
 	sigaction(SIGUSR1, &sigact, NULL);
 	sigaction(SIGUSR2, &sigact, NULL);
 	while (1)
