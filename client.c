@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
 void	send_len(int pid, char *str)
 {
 	int	bits;
@@ -30,6 +29,24 @@ void	send_len(int pid, char *str)
 	}
 }
 
+void	send_pid(int pid, int send)
+{
+	int	bits;
+
+	bits = 31;
+	while (bits >= 0)
+	{
+		if ((send >> bits & 1) == 1)
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		bits--;
+		usleep(80);
+	}
+}
+
+#include <stdio.h>
+
 void	send_bits(char *str, int pid)
 {
 	int	i;
@@ -38,6 +55,8 @@ void	send_bits(char *str, int pid)
 	i = 0;
 	bits = 7;
 	send_len(pid, str);
+	// printf("PID: %i", getpid());
+	send_pid(pid, getpid());
 	while (str[i] != '\0')
 	{
 		while (bits >= 0)
@@ -54,53 +73,52 @@ void	send_bits(char *str, int pid)
 	}
 }
 
-// void    send_bits(char *str, int pid)
-// {
-//     int i = 0;
-//     int bits = 31;
-//     int len;
-//     len = ft_strlen(str);
-//     // char *char_nb = ft_itoa(len);
-//     while(bits >= 0)
-//     {
-//         if((len >> bits & 1) == 1)
-//             kill(pid, SIGUSR1); // -> 1
-//         else
-//             kill(pid, SIGUSR2); // -> 0
-//         bits--;
-//         usleep(80);
-//     }
-//     bits = 7;
-//     i = 0;
-//     while(str[i] != '\0')
-//     {
-//         while(bits >= 0)
-//         {
-//             //desplaza el valor de str[i] (los bits)
-//             //operador AND (si el ultimo bit es 1 ; true)
-//             if((str[i] >> bits & 1) == 1)
-//             {
-//                 // write(1, "1", 1);
-//                 kill(pid, SIGUSR1); // -> 1
-//             }
-//             else
-//             {
-//                 // write(1, "0", 1);
-//                 kill(pid, SIGUSR2); // -> 0
-//             }
-//             bits--;
-//             usleep(80);
-//         }
-//         usleep(80);
-//         bits = 7;
-//         i++;
-//     }
-// }
 
-void recieved(int pid)
+void received(int signo)
 {
-	write(1, "RECIBIDO", 9);
+    // Manejar la señal recibida
+    if (signo == SIGUSR1)
+        write(1, "BIEN !!!!\n", 11);
+    else if (signo == SIGUSR2)
+        write(1, "Error: Not received confirmation signal.\n", 41);
+    else
+        perror("Error receiving signal");
 }
+
+// int main(int argc, char **argv)
+// {
+//     if (argc != 3)
+//     {
+//         ft_putstr_fd(C_RED"ERROR! ", 1);
+//         ft_putstr_fd(C_RESET"The client takes two parameters:\n", 1);
+//         ft_putstr_fd("./client <PID> <STRING>\n", 1);
+//         return 1;  // Retorna un código de error
+//     }
+
+//     int server_pid = ft_atoi(argv[1]);
+//     if (server_pid <= 0)
+//     {
+//         ft_putstr_fd(C_RED"ERROR! ", 1);
+//         ft_putstr_fd(C_RESET"The PID is not valid!\n", 1);
+//         return 1;  // Retorna un código de error
+//     }
+
+//     if (ft_strlen(argv[2]) < 1)
+//     {
+//         ft_putstr_fd(C_RED"ERROR! ", 1);
+//         ft_putstr_fd(C_RESET"Write a message with content!\n", 1);
+//         return 1;  // Retorna un código de error
+//     }
+
+//     signal(SIGUSR1, received);
+
+//     // Añade una pausa antes de enviar señales al servidor
+//     usleep(500000);  // Pausa de 0.5 segundos
+
+//     send_bits(argv[2], server_pid);
+
+//     return 0;  // Retorna éxito
+// }
 
 int	main(int argc, char **argv)
 {
@@ -124,7 +142,7 @@ int	main(int argc, char **argv)
 		}
 		else
 		{
-			signal(SIGUSR2, recieved); //int sig en (void)sig y devolvemos recibido
+			signal(SIGUSR1, received);
 			send_bits(argv[2], ft_atoi(argv[1]));
 		}
 	}
