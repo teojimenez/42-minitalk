@@ -54,48 +54,12 @@ void	send_bits(char *str, int pid)
 	}
 }
 
-// void    send_bits(char *str, int pid)
-// {
-//     int i = 0;
-//     int bits = 31;
-//     int len;
-//     len = ft_strlen(str);
-//     // char *char_nb = ft_itoa(len);
-//     while(bits >= 0)
-//     {
-//         if((len >> bits & 1) == 1)
-//             kill(pid, SIGUSR1); // -> 1
-//         else
-//             kill(pid, SIGUSR2); // -> 0
-//         bits--;
-//         usleep(80);
-//     }
-//     bits = 7;
-//     i = 0;
-//     while(str[i] != '\0')
-//     {
-//         while(bits >= 0)
-//         {
-//             //desplaza el valor de str[i] (los bits)
-//             //operador AND (si el ultimo bit es 1 ; true)
-//             if((str[i] >> bits & 1) == 1)
-//             {
-//                 // write(1, "1", 1);
-//                 kill(pid, SIGUSR1); // -> 1
-//             }
-//             else
-//             {
-//                 // write(1, "0", 1);
-//                 kill(pid, SIGUSR2); // -> 0
-//             }
-//             bits--;
-//             usleep(80);
-//         }
-//         usleep(80);
-//         bits = 7;
-//         i++;
-//     }
-// }
+void	recived(int sig)
+{
+	(void)sig;
+
+	write(1, "RECIVED!\n", 0);
+}
 
 int	main(int argc, char **argv)
 {
@@ -118,7 +82,10 @@ int	main(int argc, char **argv)
 			ft_putstr_fd(C_RESET"Write a message with content!\n", 1);
 		}
 		else
+		{
+			signal(SIGUSR2, recived);
 			send_bits(argv[2], ft_atoi(argv[1]));
+		}
 	}
 	return (0);
 }

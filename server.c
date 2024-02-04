@@ -14,7 +14,7 @@
 
 static int	g_int_nb;
 
-void	receive_bits(int bit)
+void	receive_bits(int bit, siginfo_t *info, void *context)
 {
 	static int	i = 0;
 	static int	j = 0;
@@ -22,6 +22,7 @@ void	receive_bits(int bit)
 	static char	whole_c = 0;
 	static char	*result = NULL;
 
+	(void)context;
 	if (flag == 1)
 	{
 		add_bits(bit, &whole_c, &g_int_nb, 0);
@@ -39,18 +40,23 @@ void	receive_bits(int bit)
 			flag = reset(&g_int_nb, &i, &j, &result);
 			free(result);
 			whole_c = 0;
+			kill(info -> si_pid, SIGUSR2);
 		}
 	}
 }
 
 int	main(void)
 {
+	struct sigaction	sigact;
+	
 	ft_putstr_fd("PID: "C_GREEN, 1);
 	ft_putnbr_fd(getpid(), 1);
 	ft_putstr_fd(C_RESET"", 1);
 	ft_putstr_fd("\nWaiting for a signal ...\n", 1);
-	signal(SIGUSR1, receive_bits);
-	signal(SIGUSR2, receive_bits);
+	sigact.sa_sigaction = receive_bits;
+	sigact.sa_flags = 0;
+	sigaction(SIGUSR1, &sigact, NULL);
+	sigaction(SIGUSR2, &sigact, NULL);
 	while (1)
 		pause();
 	return (0);
